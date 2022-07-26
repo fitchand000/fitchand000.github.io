@@ -86,7 +86,7 @@
                         curRow = data[nameMap.get(curPark)]
                         tooltip.style("opacity", 1).html(curRow["Year" + years[ind]] + " Visitors").raise()
                 }).on("mouseout", function() {tooltip.style("opacity", 0);}).on("mousemove", function() {
-                    tooltip.style("left", d3.mouse(this)[0] + 80 + "px").style("top", d3.mouse(this)[1] + 80 + "px")
+                    tooltip.style("left", d3.mouse(this)[0] + 280 + "px").style("top", d3.mouse(this)[1] + 80 + "px")
                 })
                 g.append("text").attr("x", 125).attr("y", -5).attr("id", "title").style("font-size", "20px");
                 g.append("text").attr("x", 233).attr("y", 440).style("font-size", "16px").text("Year")
