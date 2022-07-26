@@ -6,7 +6,7 @@
 <div id="tooltip"></div>
 
 <h1>
-    National Park Visitors From 2019 - 2021
+    Covid 19 and National Park Visitation
 </h1>
 
 <button id="prev" onclick="prev()" style="width:100px; height:30px;"> Prev </button>
@@ -59,7 +59,7 @@
             yScales.push(scale)
         }
 
-        let g = d3.select("svg").append("g").attr("transform", "translate(100, 50)")
+        let g = d3.select("svg").append("g").attr("transform", "translate(300, 50)")
 
         let year;
         let j;
@@ -84,29 +84,69 @@
                             ind = 2
                         }
                         curRow = data[nameMap.get(curPark)]
-                        console.log("Year" + years[ind]);
                         tooltip.style("opacity", 1).html(curRow["Year" + years[ind]] + " Visitors").raise()
                 }).on("mouseout", function() {tooltip.style("opacity", 0);}).on("mousemove", function() {
-                    tooltip.style("left", d3.mouse(this)[0] + 70 + "px").style("top", d3.mouse(this)[1] + 100 + "px")
+                    tooltip.style("left", d3.mouse(this)[0] + 80 + "px").style("top", d3.mouse(this)[1] + 80 + "px")
                 })
                 g.append("text").attr("x", 125).attr("y", -5).attr("id", "title").style("font-size", "20px");
                 g.append("text").attr("x", 233).attr("y", 440).style("font-size", "16px").text("Year")
                 g.append("text").attr("x", -233).attr("y", -70).attr("transform", "rotate(-90)").style("font-size", "16px").text("Annual Visitors")
 
             }
-            d3.select("svg").append("g").attr("transform", "translate(99, 50)").call(d3.axisLeft(yScales[i]))
+            d3.select("svg").append("g").attr("transform", "translate(299, 50)").call(d3.axisLeft(yScales[i]))
                 .attr("class", "all").attr("display", "none").attr("id", "Left" + curRow.ParkName);
 
-            d3.select("svg").append("g").attr("transform", "translate(99, 450)").call(d3.axisBottom(xScale))
+            d3.select("svg").append("g").attr("transform", "translate(299, 450)").call(d3.axisBottom(xScale))
         }
-        const p1 = "asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf"
-        let texts = d3.select("svg").append("g").attr("transform", "translate(800, 100)")
-        texts.append('foreignObject').attr('width', '100').append('p').text(p1)
+        let texts = d3.select("svg").append("g").attr("transform", "translate(810, 160)")
+
+        let t = texts.append('text').attr("id", "text1").style("display", "none")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("National Park visitation has been steadily rising on average")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("over the last few decades. The chart on the left shows that")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("going into 2019, Yellowstone National Park in Wyoming had")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("over 4 million visitors! ")
+
+
+        t = texts.append('text').attr("id", "text2").style("display", "none")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("In 2020, the Covid-19 pandemic rattled the world, including")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("the National Park system. On March 24th Yellowstone was officially")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("closed to visitors. It was not until May 18th that Yellowstone")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("partially reopened. Even after Yellowstone fully reopened, many")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("travelers were still anxious to fly across the country unvaccinated")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("to visit. All of these factors resulted in 2020 having the fewest")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("visitors to Yellowstone in over 5 years with only about 3.8 million")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("visitors. Many other national parks also experienced a significant")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("decrease in visitation for similar reasons as YellowStone.")
+
+
+
+        t = texts.append('text').attr("id", "text3").style("display", "none")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("In 2021, the National Park Service saw their busiest year to date.")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("Many people who had spent the last year in isolation were vaccinated")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("and ready to travel again. As a result, park visitation rates")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("at Yellowstone skyrocketed with nearly 4.9 million visitors in")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("2021. This represents an almost 15% increase over the previous")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("record annual visitation. National Parks across the")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("country saw their visitation numbers bounce back in 2021.")
+
+        t = texts.append('text').attr("id", "text4").style("display", "none")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("Explore the data for yourself! In the search box below you can")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("type the name of your favorite National Park and see how its")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("visitation numbers were affected by the Covid-19 pandemic.")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("Do all parks follow the same trend as Yellowstone National Park?")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("Try making some predictions as to why some national parks")
+        t.append("tspan").attr("dy", 17).attr("x", 0).text("rebounded in 2021 while others did not.")
+
+
         first()
     }
 
     function first() {
         displayGraph("Yellowstone NP")
+        d3.select("#text1").style("display", "block")
+        d3.select("#text2").style("display", "none")
+        d3.select("#text3").style("display", "none")
+        d3.select("#text4").style("display", "none")
         document.getElementById("npsLocationList").style.display = "none";
         document.getElementById("parkSearchBar").style.display = "none";
         document.getElementById("prev").disabled = true;
@@ -118,25 +158,38 @@
 
     function second() {
         displayGraph("Yellowstone NP")
+        d3.select("#text1").style("display", "none")
+        d3.select("#text2").style("display", "block")
+        d3.select("#text3").style("display", "none")
+        d3.select("#text4").style("display", "none")
         document.getElementById("npsLocationList").style.display = "none";
         document.getElementById("parkSearchBar").style.display = "none";
+        document.getElementById("text1").style.display = "none";
         document.getElementById("prev").disabled = false;
-        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "10%");
+        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "7%");
         document.getElementById("Yellowstone NP2021").style.display = "none";
         document.getElementById("Yellowstone NP2020").setAttribute("fill-opacity", "80%");
     }
 
     function third() {
         displayGraph("Yellowstone NP")
+        d3.select("#text1").style("display", "none")
+        d3.select("#text2").style("display", "none")
+        d3.select("#text3").style("display", "block")
+        d3.select("#text4").style("display", "none")
         document.getElementById("npsLocationList").style.display = "none";
         document.getElementById("parkSearchBar").style.display = "none";
         document.getElementById("next").disabled = false;
-        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "10%");
-        document.getElementById("Yellowstone NP2020").setAttribute("fill-opacity", "10%");
+        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "7%");
+        document.getElementById("Yellowstone NP2020").setAttribute("fill-opacity", "7%");
         document.getElementById("Yellowstone NP2021").setAttribute("fill-opacity", "80%");
     }
 
     function fourth() {
+        d3.select("#text1").style("display", "none")
+        d3.select("#text2").style("display", "none")
+        d3.select("#text3").style("display", "none")
+        d3.select("#text4").style("display", "block")
         document.getElementById("npsLocationList").style.display = "block";
         document.getElementById("parkSearchBar").style.display = "block";
         document.getElementById("next").disabled = true;
@@ -147,29 +200,21 @@
     }
 
     function next() {
-        console.log(curSlide)
         curSlide = curSlide + 1
         if (curSlide > 4) {
             curSlide = 4;
         }
         if (curSlide === 2) {
-            console.log("two")
-
             second();
         }
         else if (curSlide === 3) {
-            console.log("trhee")
-
             third();
         } else {
-            console.log("four")
-
             fourth()
         }
     }
 
     function prev() {
-        console.log('prev')
         curSlide = curSlide - 1
         if (curSlide < 1) {
             curSlide = 1;
