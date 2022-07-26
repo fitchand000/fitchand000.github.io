@@ -1,1 +1,233 @@
-Hello World
+<html>
+<link rel="stylesheet" href="styles.css">
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<body onload="init()">
+
+<div id="tooltip"></div>
+
+<h1>
+    National Park Visitors From 2019 - 2021
+</h1>
+
+<button id="prev" onclick="prev()" style="width:100px; height:30px;"> Prev </button>
+<button id="next" onclick="next()" style="width:100px; height:30px;"> Next </button>
+
+
+<svg width=100% height=500 id="img"></svg>
+
+<input type="text" id="parkSearchBar" onkeyup="filterParkNames()" placeholder="Search for and select your favorite National Park">
+
+<ul id="npsLocationList" style="height: 33%; overflow: auto;"></ul>
+
+<script>
+    let curPark;
+    let curSlide = 1;
+
+    let tooltip = d3.select("#tooltip")
+
+    async function init() {
+        const data = await d3.csv("nps_data.csv")
+        let names = [];
+        let i;
+        let nameMap = new Map()
+        for (i = 0; i < data.length; i++) {
+            nameMap.set(data[i].ParkName, i)
+            names.push(data[i].ParkName);
+        }
+
+        d3.select("ul").selectAll("button")
+            .data(names).enter()
+            .append("button")
+            .attr("value", function (d) {return d;})
+            .attr("onclick", "displayGraph(this.value)").text(function (d) {return d;});
+
+
+        let years = ["2019", "2020", "2021"]
+        let yScales = []
+        let xScale = d3.scaleBand().domain(years).range([0, 500])
+
+        let curData;
+        let scale;
+        let min;
+        let max;
+
+        for (i = 0; i < data.length; i++) {
+            curData = [data[i].Year2019, data[i].Year2020, data[i].Year2021]
+            min = Math.min(data[i].Year2019, data[i].Year2020, data[i].Year2021) /  1.3;
+            max = Math.max(data[i].Year2019, data[i].Year2020, data[i].Year2021)
+            scale = d3.scaleLinear().domain([min, max]).range([400, 0])
+            yScales.push(scale)
+        }
+
+        let g = d3.select("svg").append("g").attr("transform", "translate(100, 50)")
+
+        let year;
+        let j;
+        let curRow;
+        let curY;
+        let colors = ["blue", "red", "green"]
+
+        for (i = 0; i < data.length; i++) {
+            curRow = data[i]
+            for (j = 0; j < 3; j++) {
+                year = years[j]
+                curY = yScales[i](curRow["Year" + year])
+                g.append("rect").attr("y", yScales[i](curRow["Year" + year])).attr("width", 500 / 3)
+                    .attr("x", xScale(year)).attr("height", 400 - curY).attr("class", curRow.ParkName).attr("id", curRow.ParkName + year)
+                    .attr("display", "none").attr("fill", colors[j]).attr("fill-opacity", "80%").on("mouseover", function() {
+                        let xpos = d3.mouse(this)[0];
+                        let ind = 0;
+                        if (xpos > 166) {
+                            ind = 1
+                        }
+                        if (xpos > 332) {
+                            ind = 2
+                        }
+                        curRow = data[nameMap.get(curPark)]
+                        console.log("Year" + years[ind]);
+                        tooltip.style("opacity", 1).html(curRow["Year" + years[ind]] + " Visitors").raise()
+                }).on("mouseout", function() {tooltip.style("opacity", 0);}).on("mousemove", function() {
+                    tooltip.style("left", d3.mouse(this)[0] + 70 + "px").style("top", d3.mouse(this)[1] + 100 + "px")
+                })
+                g.append("text").attr("x", 125).attr("y", -5).attr("id", "title").style("font-size", "20px");
+                g.append("text").attr("x", 233).attr("y", 440).style("font-size", "16px").text("Year")
+                g.append("text").attr("x", -233).attr("y", -70).attr("transform", "rotate(-90)").style("font-size", "16px").text("Annual Visitors")
+
+            }
+            d3.select("svg").append("g").attr("transform", "translate(99, 50)").call(d3.axisLeft(yScales[i]))
+                .attr("class", "all").attr("display", "none").attr("id", "Left" + curRow.ParkName);
+
+            d3.select("svg").append("g").attr("transform", "translate(99, 450)").call(d3.axisBottom(xScale))
+        }
+        const p1 = "asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf asdfkasasdfasdfasdfasdfasdfasdf"
+        let texts = d3.select("svg").append("g").attr("transform", "translate(800, 100)")
+        texts.append('foreignObject').attr('width', '100').append('p').text(p1)
+        first()
+    }
+
+    function first() {
+        displayGraph("Yellowstone NP")
+        document.getElementById("npsLocationList").style.display = "none";
+        document.getElementById("parkSearchBar").style.display = "none";
+        document.getElementById("prev").disabled = true;
+        document.getElementById("Yellowstone NP2020").style.display = "none";
+        document.getElementById("Yellowstone NP2021").style.display = "none";
+        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "80%");
+
+    }
+
+    function second() {
+        displayGraph("Yellowstone NP")
+        document.getElementById("npsLocationList").style.display = "none";
+        document.getElementById("parkSearchBar").style.display = "none";
+        document.getElementById("prev").disabled = false;
+        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "10%");
+        document.getElementById("Yellowstone NP2021").style.display = "none";
+        document.getElementById("Yellowstone NP2020").setAttribute("fill-opacity", "80%");
+    }
+
+    function third() {
+        displayGraph("Yellowstone NP")
+        document.getElementById("npsLocationList").style.display = "none";
+        document.getElementById("parkSearchBar").style.display = "none";
+        document.getElementById("next").disabled = false;
+        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "10%");
+        document.getElementById("Yellowstone NP2020").setAttribute("fill-opacity", "10%");
+        document.getElementById("Yellowstone NP2021").setAttribute("fill-opacity", "80%");
+    }
+
+    function fourth() {
+        document.getElementById("npsLocationList").style.display = "block";
+        document.getElementById("parkSearchBar").style.display = "block";
+        document.getElementById("next").disabled = true;
+        document.getElementById("Yellowstone NP2019").setAttribute("fill-opacity", "80%");
+        document.getElementById("Yellowstone NP2020").setAttribute("fill-opacity", "80%");
+        document.getElementById("Yellowstone NP2021").setAttribute("fill-opacity", "80%");
+
+    }
+
+    function next() {
+        console.log(curSlide)
+        curSlide = curSlide + 1
+        if (curSlide > 4) {
+            curSlide = 4;
+        }
+        if (curSlide === 2) {
+            console.log("two")
+
+            second();
+        }
+        else if (curSlide === 3) {
+            console.log("trhee")
+
+            third();
+        } else {
+            console.log("four")
+
+            fourth()
+        }
+    }
+
+    function prev() {
+        console.log('prev')
+        curSlide = curSlide - 1
+        if (curSlide < 1) {
+            curSlide = 1;
+        }
+        if (curSlide === 1) {
+            first();
+        }
+        else if (curSlide === 2) {
+            second();
+        } else {
+            third()
+        }
+    }
+
+    function displayGraph(text) {
+        curPark = text
+        let allElements;
+        let i;
+        allElements = document.getElementsByTagName('rect');
+        for (i = 0; i < allElements.length; i++) {
+            allElements[i].style.display = "none";
+        }
+        allElements = document.getElementsByClassName('all');
+        for (i = 0; i < allElements.length; i++) {
+            allElements[i].style.display = "none";
+        }
+
+        let elements = document.getElementsByClassName(text);
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.display = "block";
+        }
+        document.getElementById("Left" + text).style.display = "block";
+        document.getElementById("title").textContent = "Annual Visitors in " + text;
+
+    }
+
+
+    function filterParkNames() {
+
+        let input = document.getElementById('parkSearchBar');
+        let filter = input.value.toUpperCase();
+        let ul = document.getElementById("npsLocationList");
+        let buttons = ul.getElementsByTagName('button');
+
+        // Loop through all list items, and hide those who don't match the search query
+        let btn, txtValue;
+        for (let i = 0; i < buttons.length; i++) {
+            btn = buttons[i];
+            txtValue = btn.textContent || btn.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                buttons[i].style.display = "";
+            } else {
+                buttons[i].style.display = "none";
+            }
+        }
+    }
+
+
+</script>
+</body>
+</html>
